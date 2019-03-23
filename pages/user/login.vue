@@ -90,13 +90,10 @@ export default {
     async login() {
       let username = this.ruleForm.email
       let password = this.ruleForm.password
-      let { data } = await axios.post(
-        `http://localhost:2333/newGame-BackEnd/public/index.php/api/user/login`,
-        {
-          email: username,
-          password: password
-        }
-      )
+      let { data } = await axios.post(`/api/user/login`, {
+        email: username,
+        password: password
+      })
       console.log(data.loginStatus === '0')
       if (data.loginStatus === '0') {
         console.log('wsl')
