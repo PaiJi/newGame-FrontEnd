@@ -97,10 +97,22 @@ export default {
           clubAdmin: clubAdmin,
           joinMode: joinMode,
           status: status
+        },
+        {
+          withCredentials: true
         }
       )
-      if (data.statusCode === '200') {
-        console.log('success')
+      if (data.addClubResult === '1') {
+        this.$notify({
+          title: '成功添加社团',
+          message: '操作成功啦，请耐心等待审核',
+          type: 'success'
+        })
+      } else {
+        this.$notify.error({
+          title: '操作失败',
+          message: '系统错误信息：' + data.errMsg
+        })
       }
     }
   }
