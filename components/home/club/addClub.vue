@@ -20,8 +20,8 @@
             el-col(:span="12")
                 el-form-item(label="社团归属" prop="clubBelong")
                     el-select(placeholder="请选择社团归属" v-model="addClubForm.clubBelong")
-                        el-option(label="电子信息工程" value="1")
-                        el-option(label="团委" value="2")
+                        el-option(label="电子信息工程" value="2")
+                        el-option(label="团委" value="1")
         el-row
             el-col(:span="12")
                 el-form-item(label="社团分类" prop="clubSort")
