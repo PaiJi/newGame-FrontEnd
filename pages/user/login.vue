@@ -107,10 +107,14 @@ export default {
           title: '登录成功~',
           message:
             '身份验证通过，用户ID为' + data.userId + '，现在启动页面转向。',
-          type: 'success'
+          type: 'success',
+          onClose: this.redirectpage
         })
       }
       console.log(data)
+    },
+    redirectpage() {
+      window.location.href = '/home/portal'
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
