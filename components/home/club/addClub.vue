@@ -24,6 +24,12 @@
                         el-option(label="团委" value="2")
         el-row
             el-col(:span="12")
+                el-form-item(label="社团分类" prop="clubSort")
+                    el-select(placeholder="请选择社团类别" v-model="addClubForm.clubSort")
+                        el-option(label="技术类" value="1")
+                        el-option(label="娱乐类" value="2")
+        el-row
+            el-col(:span="12")
                 el-form-item(label="社团负责人" prop="clubadmin")
                     el-input(v-model="addClubForm.clubAdmin" placeholder="输入该用户的UID")
         el-row
@@ -63,6 +69,7 @@ export default {
         imgUrl: '',
         intro: '',
         clubBelong: '',
+        clubSort: '',
         clubAdmin: '',
         joinMode: '',
         status: ''
@@ -75,6 +82,7 @@ export default {
       let imgUrl = this.addClubForm.imgUrl
       let intro = this.addClubForm.intro
       let clubBelong = this.addClubForm.clubBelong
+      let clubSort = this.addClubForm.clubSort
       let clubAdmin = this.addClubForm.clubAdmin
       let joinMode = this.addClubForm.joinMode
       let status = this.addClubForm.status
@@ -85,6 +93,7 @@ export default {
           imgUrl: imgUrl,
           intro: intro,
           clubBelong: clubBelong,
+          clubSort: clubSort,
           clubAdmin: clubAdmin,
           joinMode: joinMode,
           status: status
