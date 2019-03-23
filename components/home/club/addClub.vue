@@ -51,7 +51,7 @@
         el-row
             el-col
                 el-form-item
-                    el-button(type="primary" ) 立即创建
+                    el-button(type="primary" @click="add") 立即创建
 </template>
 <style lang="scss">
 .form-title {
