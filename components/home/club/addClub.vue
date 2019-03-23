@@ -87,7 +87,7 @@ export default {
       let joinMode = this.addClubForm.joinMode
       let status = this.addClubForm.status
       let { data } = await axios.post(
-        `http://localhost:2333/newGame-BackEnd/public/index.php/api/club/add`,
+        `/api/club/addclub`,
         {
           clubName: clubName,
           imgUrl: imgUrl,
