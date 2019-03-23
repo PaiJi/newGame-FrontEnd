@@ -36,18 +36,18 @@
             el-col
                 el-form-item(label="加入方式" prop="joinmode")
                     el-radio-group(v-model="addClubForm.joinMode")
-                        el-radio(label="manual") 人工审核
-                        el-radio(label="invite") 仅邀请
-                        el-radio(label="unlimit") 无限制
-                        el-radio(label="unallow") 不允许新成员
+                        el-radio(label="1") 人工审核
+                        el-radio(label="2") 仅邀请
+                        el-radio(label="3") 无限制
+                        el-radio(label="0") 不允许新成员
         el-row
             el-col
                 el-form-item(label="社团状态" prop="status")
                     el-radio-group(v-model="addClubForm.status")
-                        el-radio(label="ready") 筹备中
-                        el-radio(label="running") 正常运营
-                        el-radio(label="warning") 运营异常
-                        el-radio(label="closed") 已注销
+                        el-radio(label="2") 筹备中
+                        el-radio(label="1") 正常运营
+                        el-radio(label="3") 运营异常
+                        el-radio(label="0") 已注销
         el-row
             el-col
                 el-form-item
