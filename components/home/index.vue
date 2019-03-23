@@ -27,7 +27,7 @@
                 el-table
                     el-table-column(label="社团名称" width="")
                     el-table-column(label="社团简介" width="")
-                    el-table-column(label="社团认数" width="")
+                    el-table-column(label="社团人数" width="")
                     el-table-column(label="注册时间" width="")
 
 </template>
