@@ -10,6 +10,10 @@
                     el-input(v-model="addClubForm.clubName")
         el-row
             el-col(:span="12")
+                el-form-item(label="LOGO地址" prop="imgUrl")
+                    el-input(v-model="addClubForm.imgUrl")
+        el-row
+            el-col(:span="12")
                 el-form-item(label="社团简介" prop="intro")
                     el-input(type="textarea" :row=4 placeholder="随便写点什么，让大家了解你的社团" v-model="addClubForm.intro")
         el-row
@@ -56,6 +60,7 @@ export default {
     return {
       addClubForm: {
         clubName: '',
+        imgUrl: '',
         intro: '',
         clubBelong: '',
         clubAdmin: '',
@@ -67,6 +72,7 @@ export default {
   methods: {
     async add() {
       let clubName = this.addClubForm.clubName
+      let imgUrl = this.addClubForm.imgUrl
       let intro = this.addClubForm.intro
       let clubBelong = this.addClubForm.clubBelong
       let clubAdmin = this.addClubForm.clubAdmin
@@ -76,6 +82,7 @@ export default {
         `http://localhost:2333/newGame-BackEnd/public/index.php/api/club/add`,
         {
           clubName: clubName,
+          imgUrl: imgUrl,
           intro: intro,
           clubBelong: clubBelong,
           clubAdmin: clubAdmin,
