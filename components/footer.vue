@@ -1,7 +1,7 @@
 <template lang="pug">
     el-col(:gutter='20').footer
         el-row
-            p  newGame 2018-2019 Made by JiPai & Nekotora
+            p  newGame 2018-2019 Made by JiPai & Nekotora with ❤
 </template>
 <style lang="scss" scoped>
 .footer {
