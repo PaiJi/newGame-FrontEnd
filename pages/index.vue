@@ -31,24 +31,25 @@
                                             el-tag(type="info") 技术类
                                         .card-intro
                                             p {{item.intro}}
-        el-footer
+            section
+                el-row
+                    el-col(style="text-align:center")
+                        el-button(round type="primary") 更多社团
+                        el-button(round type="success") 看看活动
 </template>
 
 
 <script>
-import Logo from '~/components/Logo.vue'
+import myHeader from '~/components/header.vue'
 import axios from 'axios'
 export default {
   components: {
-    Logo
+    myHeader
   },
   data() {
     return {
       clubData: []
     }
-  },
-  created() {
-    //this.getClubList()
   },
   mounted() {
     this.getClubList()
@@ -64,31 +65,6 @@ export default {
 </script>
 
 <style lang="scss">
-.el-header {
-  //display: flex;
-  //align-items: center;
-  background-color: #fafafa;
-  .header-left {
-    display: flex;
-    align-items: center;
-  }
-  .intro {
-    h1,
-    h3 {
-      padding: 3px 0px;
-      color: #111;
-      font-family: 'SF Pro SC', 'SF Pro Text', 'SF Pro Icons', 'PingFang SC',
-        'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    }
-  }
-  .el-row {
-    display: flex;
-    align-items: center;
-  }
-  .button-group {
-    margin: 0 auto;
-  }
-}
 .club-list {
   padding: 20px 0px;
 
@@ -121,13 +97,6 @@ export default {
     visibility: hidden;
   }
 }
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
 
 .title {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
@@ -137,17 +106,5 @@ export default {
   font-size: 100px;
   color: #35495e;
   letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
 }
 </style>
