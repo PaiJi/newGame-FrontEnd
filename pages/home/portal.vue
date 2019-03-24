@@ -16,18 +16,18 @@
                                 el-menu-item(index='1-1' @click="currtentMainView='addClub'") 新增
                                 el-menu-item(index='1-2') 审批
                                 el-menu-item(index='1-3') 管理
-                            el-menu-item-group(title='分组2')
+                            //el-menu-item-group(title='分组2')
                                 el-menu-item(index='1-3') 表单列表
-                            el-submenu(index='1-4')
+                            //el-submenu(index='1-4')
                                 template(slot='title') 选项4
                                 el-menu-item(index='1-4-1') 选项1
-                        el-menu-item(index='2')
+                        el-menu-item(index='2' @click="currtentMainView='clubList'")
                             i.el-icon-menu
                             span(slot='title') 社团列表
                         el-menu-item(index='3', disabled='')
                             i.el-icon-document
                             span(slot='title') 活动列表
-                        el-menu-item(index='4')
+                        el-menu-item(index='4' @click="currtentMainView='setting'")
                             i.el-icon-setting
                             span(slot='title') 系统设置
         el-container
@@ -39,8 +39,8 @@
                             el-menu-item(index='2') 消息中心
                             el-submenu(index='3')
                                 template(slot='title') 用户管理
-                                el-menu-item(index='3-1') 信息修改
-                                el-menu-item(index='3-2') 安全设置
+                                el-menu-item(index='3-1' @click="currtentMainView='editInfo'") 信息修改
+                                el-menu-item(index='3-2' @click="currtentMainView='safeSetting'") 安全设置
                                 el-menu-item(index='3-3') 登出
                                 //el-submenu(index='3-4')
                                     template(slot='title') 选项4
@@ -79,10 +79,18 @@
 <script>
 import index from '~/components/home/index'
 import addClub from '~/components/home/club/addClub'
+import clubList from '~/components/home/clubList'
+import setting from '~/components/home/setting'
+import editInfo from '~/components/home/user/editInfo'
+import safeSetting from '~/components/home/user/safeSetting'
 export default {
   components: {
     addClub,
-    index
+    index,
+    clubList,
+    setting,
+    editInfo,
+    safeSetting
   },
   data() {
     return {
