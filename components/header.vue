@@ -6,9 +6,15 @@
                 h3 NewGame
                 h1 可能是东半球第二好用的社团管理工具
         el-col(:span='6' style="text-align:right")
-            .button-group
+            .button-group(v-if="!userLoginStatus")
                 el-button 注册
                 el-button 登录
+            .user-avastar(v-if="userLoginStatus")
+                //i.el-icon-more
+                el-dropdown(split-button) {{userInfo.nickname}}
+                    el-dropdown-menu(slot="dropdown")
+                        el-dropdown-item 个人中心
+                        el-dropdown-item 退出
 </template>
 <style lang="scss">
 .el-header {
@@ -35,3 +41,28 @@
   }
 }
 </style>
+<script>
+import axios from 'axios'
+export default {
+  data() {
+    return {
+      userId: '',
+      userLoginStatus: false,
+      userInfo: []
+    }
+  },
+  mounted() {
+    this.getUserId()
+  },
+  methods: {
+    async getUserId() {
+      let { data } = await axios.get('/api/user/getuserinfo')
+      if (data.loginStatus == 'true') {
+        this.userId = data.userInfo.id
+        this.userInfo = data.userInfo
+        this.userLoginStatus = true
+      }
+    }
+  }
+}
+</script>
