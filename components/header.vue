@@ -7,14 +7,14 @@
                 h1 可能是东半球第二好用的社团管理工具
         el-col(:span='6' style="text-align:right")
             .button-group(v-if="!userLoginStatus")
-                el-button 注册
-                el-button 登录
+                el-button(@click="$router.push({ path: '/user/register' })") 注册
+                el-button(@click="$router.push({ path: '/user/login' })") 登录
             .user-avastar(v-if="userLoginStatus")
                 //i.el-icon-more
-                el-dropdown(split-button) {{userInfo.nickname}}
+                el-dropdown(split-button @command="headerControl") {{userInfo.nickname}}
                     el-dropdown-menu(slot="dropdown")
-                        el-dropdown-item 个人中心
-                        el-dropdown-item 退出
+                        el-dropdown-item(command="GoHome") 个人中心
+                        el-dropdown-item(command="Logout") 退出
 </template>
 <style lang="scss">
 .el-header {
@@ -62,6 +62,34 @@ export default {
         this.userInfo = data.userInfo
         this.userLoginStatus = true
       }
+    },
+    async logout() {
+      let { data } = await axios.get('/api/user/logout')
+      if (data.execResult == '1') {
+        this.userLoginStatus = false
+        this.userId = null
+        this.userInfo = null
+        this.$notify.info({
+          title: '用户注销成功',
+          message: '感谢您的使用~'
+        })
+      }
+      if (data.execResult == '0') {
+        this.$notify.info({
+          title: '虽然几率很低但是真的发生了',
+          message: data.errMsg
+        })
+      }
+    },
+    headerControl(command) {
+      if (command == 'GoHome') {
+        this.$router.push({ path: '/home/portal' })
+      }
+      if (command == 'Logout') {
+        //执行登出操作
+        this.logout()
+      }
+      //this.$router.push({ path: '/home/portal' })
     }
   }
 }
