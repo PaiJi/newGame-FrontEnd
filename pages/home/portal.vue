@@ -12,24 +12,27 @@
                                 i.el-icon-location
                                 span 社团管理
                             el-menu-item-group
-                                template(slot='title') 社团
-                                el-menu-item(index='1-1' @click="currtentMainView='addClub'") 新增
-                                el-menu-item(index='1-2') 审批
-                                el-menu-item(index='1-3') 管理
+                                template(slot='title') 我的社团
+                                el-menu-item(index='1-1' @click="currtentMainView='myClubList'") 社团列表
+                                el-menu-item(index='1-2') 我的审批
+                                el-menu-item(index='1-3' @click="currtentMainView='addClub'") 申请新社团
                             //el-menu-item-group(title='分组2')
                                 el-menu-item(index='1-3') 表单列表
                             //el-submenu(index='1-4')
                                 template(slot='title') 选项4
                                 el-menu-item(index='1-4-1') 选项1
-                        el-menu-item(index='2' @click="currtentMainView='clubList'")
-                            i.el-icon-menu
-                            span(slot='title') 社团列表
-                        el-menu-item(index='3', disabled='')
-                            i.el-icon-document
-                            span(slot='title') 活动列表
+                        el-menu
+                            el-submenu(index='2')
+                                template(slot='title')
+                                    i.el-icon-document
+                                    span 活动管理
+                                el-menu-item-group
+                                    el-menu-item(index='2-1') 活动列表
+                                    el-menu-item(index='2-2') 活动管理
+                                    el-menu-item(index='2-3' @click="currtentMainView='addActivity'") 申请新活动
                         el-menu-item(index='4' @click="currtentMainView='setting'")
                             i.el-icon-setting
-                            span(slot='title') 系统设置
+                            span(slot='title') 设置
         el-container
             el-header
                 el-row
@@ -42,11 +45,6 @@
                                 el-menu-item(index='3-1' @click="currtentMainView='editInfo'") 信息修改
                                 el-menu-item(index='3-2' @click="currtentMainView='safeSetting'") 安全设置
                                 el-menu-item(index='3-3') 登出
-                                //el-submenu(index='3-4')
-                                    template(slot='title') 选项4
-                                    el-menu-item(index='3-4-1') 选项1
-                                    el-menu-item(index='3-4-2') 选项2
-                                    el-menu-item(index='3-4-3') 选项3
 
             el-main
                 component(:is="currtentMainView")
@@ -78,16 +76,23 @@
 </style>
 <script>
 import index from '~/components/home/index'
+//主界面导入分割线
 import addClub from '~/components/home/club/addClub'
+import myClubList from '~/components/home/club/myClubList'
 import clubList from '~/components/home/clubList'
+//社团管理组件导入分割线
+import addActivity from '~/components/home/activity/addActivity'
+//活动管理组件导入分割线
 import setting from '~/components/home/setting'
 import editInfo from '~/components/home/user/editInfo'
 import safeSetting from '~/components/home/user/safeSetting'
 export default {
   components: {
-    addClub,
     index,
     clubList,
+    myClubList,
+    addClub,
+    addActivity,
     setting,
     editInfo,
     safeSetting
