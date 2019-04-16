@@ -44,7 +44,7 @@
                         .clubPanel
                             el-row
                                 el-col(:offset='2' :span='16')
-                                    el-button(type="primary" @click="joinClub()") 立刻加入
+                                    el-button(type="primary" @click="joinClub") 立刻加入
             section.clubActivity
                 el-row(:gutter="20")
                     el-col(:span="15")
@@ -89,8 +89,6 @@ section.clubActivity {
 }
 section.clubActivity {
   //background-color: ;
-  .el-row {
-  }
   .el-col {
     background-color: #f4f5f7;
     padding: 20px;
@@ -109,7 +107,8 @@ export default {
   data() {
     return {
       paramValue: '',
-      clubDetail: []
+      clubDetail: [],
+      userId: myHeader.data().userId
     }
   },
   mounted() {
@@ -127,20 +126,41 @@ export default {
       let { data } = await axios.get(
         '/api/club/joinclub?clubid=' + this.paramValue
       )
-      if (data.joinResultCode === '1') {
+      console.log(data)
+      if (data.joinClubResultCode === '1') {
         //弹窗告知用户已经加入
+        this.$notify({
+          title: '成功加入社团辣',
+          message: '您已经是社团成员了，快去看看吧！',
+          type: 'success'
+        })
       }
-      if (data.joinResultCode === '2') {
+      if (data.joinClubResultCode === '0' && data.clubRequest === '1') {
         //告诉用户需要填表
+        this.$notify.info({
+          title: '需要填写表单',
+          message: data.errMsg
+        })
       }
-      if (data.joinResultCode === '3') {
-        //告诉用户需要审核
-      }
-      if (data.joinResultCode === '4') {
+      if (data.joinClubResultCode === '0' && data.clubRequest === '2') {
         //告诉用户社团需要邀请，加入失败
+        this.$notify.error({
+          title: '这个社团当前需要邀请',
+          message: data.errMsg
+        })
       }
-      if (data.joinResultCode === '5') {
+      if (data.joinClubResultCode === '0' && data.clubRequest === '0') {
         //社团暂不纳新，加入失败
+        this.$notify.error({
+          title: '加入大失败',
+          message: data.errMsg
+        })
+      }
+      if (data.joinClubResultCode === '0' && data.code === '42') {
+        this.$notify.error({
+          title: '哎呀！',
+          message: data.errMsg
+        })
       }
     }
   }
