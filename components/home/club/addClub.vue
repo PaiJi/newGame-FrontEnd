@@ -2,7 +2,7 @@
     el-form(:model="addClubForm" label-width="100px").container
         el-row.form-title
             el-col
-                h2 新增社团
+                h2 申请社团
                 hr
         el-row
             el-col(:span="12")
@@ -45,9 +45,9 @@
                 el-form-item(label="社团状态" prop="status")
                     el-radio-group(v-model="addClubForm.status")
                         el-radio(label="2") 筹备中
-                        el-radio(label="1") 正常运营
-                        el-radio(label="3") 运营异常
-                        el-radio(label="0") 已注销
+                        el-radio(label="1" disabled) 正常运营
+                        el-radio(label="3" disabled) 运营异常
+                        el-radio(label="0" disabled) 已注销
         el-row
             el-col
                 el-form-item
@@ -72,7 +72,7 @@ export default {
         clubSort: '',
         clubAdmin: '',
         joinMode: '',
-        status: ''
+        status: '2'
       }
     }
   },
