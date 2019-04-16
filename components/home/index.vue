@@ -4,7 +4,7 @@
             el-col(:span="8")
                 el-card
                     h5 我的社团
-                    span 5
+                    span {{myClubList.length}}
             el-col(:span="8")
                 el-card
                     h5 我的活动
