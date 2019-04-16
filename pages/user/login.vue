@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-          <el-button @click="fetchSomething()">注册</el-button>
+          <el-button @click="$router.push({ path: '/user/register' })">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -83,10 +83,6 @@ export default {
     }
   },
   methods: {
-    // async function fetchSomething () {
-    //   let ip = await this.$axios.$get('http://icanhazip.com');
-    //   console.log(ip);
-    // };
     async login() {
       let username = this.ruleForm.email
       let password = this.ruleForm.password
