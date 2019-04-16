@@ -19,15 +19,32 @@
                     el-carousel-item
                     el-carousel-item
                     el-carousel-item
-        el-row
-            el-col
-                h5 最新社团信息
-        el-row
-            el-col
-                el-table
-                    el-table-column(label="社团名称" width="")
-                    el-table-column(label="社团简介" width="")
-                    el-table-column(label="社团人数" width="")
-                    el-table-column(label="注册时间" width="")
 
 </template>
+<script>
+import axios from 'axios'
+export default {
+  data() {
+    return {
+      myClubList: []
+    }
+  },
+  mounted() {
+    this.fillData()
+  },
+  methods: {
+    async fillData() {
+      console.log('Start GET Data')
+      let { data } = await axios.get('/api/club/getmyclublist')
+      console.log(data)
+      if (data.getMyClubListResultCode == '0') {
+        console.log('LOGIN!')
+      }
+      if (data.queryResult == '1') {
+        this.myClubList = data.queryData
+        console.log(this.myClubList.length)
+      }
+    }
+  }
+}
+</script>
