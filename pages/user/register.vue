@@ -163,6 +163,9 @@ export default {
           message: data.errMsg
         })
       }
+      if (data.registerStatus === '1') {
+        this.$router.push({ path: '/user/login' })
+      }
       console.log(data)
     },
     submitForm(formName) {
