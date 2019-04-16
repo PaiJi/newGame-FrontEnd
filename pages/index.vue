@@ -92,6 +92,8 @@ export default {
   }
   .card-intro {
     margin-top: 10px;
+    height: 50px;
+    overflow: hidden;
   }
   [v-cloak] {
     visibility: hidden;
