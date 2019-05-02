@@ -27,7 +27,7 @@
                                     i.el-icon-document
                                     span 活动管理
                                 el-menu-item-group
-                                    el-menu-item(index='2-1') 活动列表
+                                    el-menu-item(index='2-1' @click="currtentMainView='myActivityList'") 活动列表
                                     el-menu-item(index='2-2') 活动管理
                                     el-menu-item(index='2-3' @click="currtentMainView='addActivity'") 申请新活动
                         el-menu-item(index='4' @click="currtentMainView='setting'")
@@ -81,6 +81,7 @@ import addClub from '~/components/home/club/addClub'
 import myClubList from '~/components/home/club/myClubList'
 import clubList from '~/components/home/clubList'
 //社团管理组件导入分割线
+import myActivityList from '~/components/home/activity/myActivity'
 import addActivity from '~/components/home/activity/addActivity'
 //活动管理组件导入分割线
 import setting from '~/components/home/setting'
@@ -92,6 +93,7 @@ export default {
     clubList,
     myClubList,
     addClub,
+    myActivityList,
     addActivity,
     setting,
     editInfo,
