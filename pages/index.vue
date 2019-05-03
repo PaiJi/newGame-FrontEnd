@@ -35,7 +35,7 @@
                 el-row
                     el-col(style="text-align:center")
                         el-button(round type="primary") 更多社团
-                        el-button(round type="success") 看看活动
+                        el-button(round type="success" @click="$router.push({ path: '/activity' })") 看看活动
 </template>
 
 
