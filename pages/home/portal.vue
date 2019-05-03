@@ -14,7 +14,7 @@
                             el-menu-item-group
                                 template(slot='title') 我的社团
                                 el-menu-item(index='1-1' @click="currtentMainView='myClubList'") 社团列表
-                                el-menu-item(index='1-2') 我的审批
+                                el-menu-item(index='1-2' @click="currtentMainView='managerClub'") 社团管理
                                 el-menu-item(index='1-3' @click="currtentMainView='addClub'") 申请新社团
                             //el-menu-item-group(title='分组2')
                                 el-menu-item(index='1-3') 表单列表
@@ -80,6 +80,7 @@ import index from '~/components/home/index'
 import addClub from '~/components/home/club/addClub'
 import myClubList from '~/components/home/club/myClubList'
 import clubList from '~/components/home/clubList'
+import managerClub from '~/components/home/club/managerClub'
 //社团管理组件导入分割线
 import myActivityList from '~/components/home/activity/myActivity'
 import addActivity from '~/components/home/activity/addActivity'
@@ -92,6 +93,7 @@ export default {
     index,
     clubList,
     myClubList,
+    managerClub,
     addClub,
     myActivityList,
     addActivity,
