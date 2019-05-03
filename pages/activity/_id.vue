@@ -18,11 +18,6 @@
                                     span {{clubDetail.start_time}} —— {{clubDetail.end_time}}
                             el-row
                                 el-col(:span='2')
-                                    span.title 所属:
-                                el-col(:span='16')
-                                    span {{clubDetail.belong}}
-                            el-row
-                                el-col(:span='2')
                                     span.title 最大参与人数:
                                 el-col(:span='16')
                                     span {{clubDetail.max_people}}
@@ -38,22 +33,18 @@
                                     span {{clubDetail.status}}
                             el-row
                                 el-col(:span='2')
-                                    span.title 社团简介:
+                                    span.title 签到要求:
+                                el-col(:span='16')
+                                    span {{clubDetail.enable_checkin}}
+                            el-row
+                                el-col(:span='2')
+                                    span.title 活动简介:
                                 el-col(:span='16')
                                     span {{clubDetail.intro}}
                         .clubPanel
                             el-row
                                 el-col(:offset='2' :span='16')
-                                    el-button(type="primary" @click="joinClub") 加入活动
-            section.clubActivity
-                el-row(:gutter="20")
-                    el-col(:span="15")
-                        h5 康康这个社团最近的大新闻
-                    el-col(:offset='2' :span="6")
-                        h5 放个公告，管理员信息
-                el-row(:gutter="20")
-                    el-col(:span="15")
-                        p 抓鸽子大赛顺利举行！
+                                    el-button(type="primary" @click="joinActivity") 加入活动
 </template>
 <style lang="scss">
 section.clubQuickBar,
@@ -87,14 +78,6 @@ section.clubActivity {
     width: 200px;
   }
 }
-section.clubActivity {
-  //background-color: ;
-  .el-col {
-    background-color: #f4f5f7;
-    padding: 20px;
-    border-radius: 5px;
-  }
-}
 </style>
 
 <script>
@@ -122,43 +105,23 @@ export default {
       )
       this.clubDetail = data
     },
-    async joinClub() {
+    async joinActivity() {
       let { data } = await axios.get(
         '/api/activity/joinactivity?activityId=' + this.paramValue
       )
       console.log(data)
-      if (data.joinClubResultCode === '1') {
+      if (data.queryResult === '1') {
         //弹窗告知用户已经加入
         this.$notify({
-          title: '成功加入社团辣',
-          message: '您已经是社团成员了，快去看看吧！',
+          title: '操作成功',
+          message: '成功报名该活动，请记得按时参与哦',
           type: 'success'
         })
       }
-      if (data.joinClubResultCode === '0' && data.clubRequest === '1') {
-        //告诉用户需要填表
-        this.$notify.info({
-          title: '需要填写表单',
-          message: data.errMsg
-        })
-      }
-      if (data.joinClubResultCode === '0' && data.clubRequest === '2') {
+      if (data.queryResult === '0') {
         //告诉用户社团需要邀请，加入失败
         this.$notify.error({
-          title: '这个社团当前需要邀请',
-          message: data.errMsg
-        })
-      }
-      if (data.joinClubResultCode === '0' && data.clubRequest === '0') {
-        //社团暂不纳新，加入失败
-        this.$notify.error({
-          title: '加入大失败',
-          message: data.errMsg
-        })
-      }
-      if (data.joinClubResultCode === '0' && data.code === '42') {
-        this.$notify.error({
-          title: '哎呀！',
+          title: '操作失败',
           message: data.errMsg
         })
       }
