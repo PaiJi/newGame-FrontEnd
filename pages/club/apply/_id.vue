@@ -8,44 +8,36 @@
                     el-col
                         h3 XX社团纳新表单
             section.questionArea
-                .questionRow(v-for="(item,index) in questionList")
-                    el-row(v-if="item.type=='input'")
-                        el-col
-                            p {{item.msg}}
-                        el-col
-                            el-input(v-model="answerList[index].answer")
-                    el-row(v-if="item.type=='number'")
-                        el-col
-                            p {{item.msg}}
-                        el-col
-                            el-input(v-model="answerList[index].answer")
-                    el-row(v-if="item.type=='radio'")
-                        el-col
-                            p {{item.msg}}
-                        el-col(v-for="(radio,index1) in JSON.parse(item.answer)" :md='3' :key="index1")
-                            el-radio(v-model="answerList[index].answer" :label='radio' border) {{radio}}
-                    el-row(v-if="item.type=='checkbox'")
-                        el-col
-                            p {{item.msg}}
-                        el-checkbox-group(v-model="answerList[index].answer")
-                            el-col(v-for="(checkbox,index2) in JSON.parse(item.answer)" :md='3' :key="index2")
-                                el-checkbox(:label='checkbox' border)
+                el-form(:model="answerForm"  ref="form" label-position="top")
+                    el-form-item(v-for="(item,index) in questionList" :label="item.msg" prop="answer")
+                        el-input(v-if="item.type=='input'" v-model="answerForm.answerList[index].answer")
+                        el-input(v-if="item.type=='number'" v-model="answerForm.answerList[index].answer")
+                        el-radio-group(v-if="item.type=='radio'" v-model="answerForm.answerList[index].answer")
+                            el-radio(v-for="(radio,index1) in JSON.parse(item.answer)" :label='radio' border) {{radio}}
+                        el-checkbox-group(v-if="item.type=='checkbox'" v-model="answerForm.answerList[index].answer")
+                            el-checkbox(v-for="(checkbox,index2) in JSON.parse(item.answer)" :label='checkbox' border)
+                    el-form-item
+                        el-button(type="primary" @click="submitForm") 提交表单
 
 </template>
 <style lang="scss">
+.el-main {
+  // max-width: 1100px;
+  // margin: 0 auto;
+}
 </style>
 
 <script>
 import axios from 'axios'
-import sortablejs from 'sortablejs'
-import draggable from 'vuedraggable'
+// import sortablejs from 'sortablejs'
+// import draggable from 'vuedraggable'
 //import $ from 'jquery'
 import myHeader from '~/components/header.vue'
 export default {
   components: {
-    myHeader,
-    sortablejs,
-    draggable
+    myHeader
+    // sortablejs,
+    // draggable
   },
   data() {
     return {
@@ -53,7 +45,9 @@ export default {
       clubDetail: [],
       userId: myHeader.data().userId,
       questionList: [],
-      answerList: []
+      answerForm: {
+        answerList: []
+      }
     }
   },
   mounted() {
@@ -93,17 +87,54 @@ export default {
       let { data } = await axios.get(
         '/api/club/getquestion?clubId=' + this.paramValue
       )
-      console.log(data)
+      //console.log(data)
       this.questionList = data
       for (let index = 0; index < data.length; index++) {
         var t = {}
+        t['question_id'] = data[index].id
         t['question'] = data[index].msg
+        t['type'] = data[index].type
         if (data[index].type == 'checkbox') {
           t['answer'] = []
         } else {
           t['answer'] = ''
         }
-        this.answerList.push(t)
+        this.answerForm.answerList.push(t)
+      }
+    },
+    async submitForm() {
+      let vaildNum = 0
+      for (const question of this.answerForm.answerList) {
+        if (question.answer == '') {
+          this.$notify.error({
+            title: '请填写完整所有内容！',
+            message: '问题：“' + question.question + '”未填写。'
+          })
+        } else {
+          vaildNum = vaildNum + 1
+        }
+        console.log(vaildNum)
+      }
+      if (vaildNum == this.answerForm.answerList.length) {
+        let { data } = await axios.post(
+          '/api/club/submitApplyForm?clubId=' + this.paramValue,
+          {
+            answerList: this.answerForm.answerList
+          }
+        )
+        if (data.submitApplyFormResultCode == '1') {
+          this.$notify({
+            title: '成功提交表单',
+            message: '请耐心等待管理员审核~',
+            type: 'success'
+          })
+        }
+        if (data.submitApplyFormResultCode == '0') {
+          this.$notify.error({
+            title: '有错误发生',
+            message: data.errMsg
+          })
+        }
       }
     }
   }
