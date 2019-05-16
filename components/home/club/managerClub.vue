@@ -129,14 +129,18 @@ export default {
         this.clubList = data.queryData
       }
     },
-    async showClubDetailPanel(val) {
-      console.log(val)
-      this.selectClub = val
-      this.whichIsShow = 'clubPanel'
+    async getContact() {
       let { data } = await axios.get(
         '/api/club/getclubcontact?clubid=' + this.selectClub.id
       )
       this.clubContact = data
+    },
+    async getApplyList() {
+      let { data } = await axios.get(
+        '/api/club/getApplyList?clubId=' + this.selectClub.id
+      )
+      this.applyList = data
+    },
     showClubDetailPanel(val) {
       //console.log(val)
       this.selectClub = val
