@@ -98,6 +98,21 @@ export default {
     return {
       clubList: [],
       selectClub: [],
+      updateClubForm: {
+        clubId: '',
+        clubName: '',
+        imgUrl: '',
+        intro: '',
+        clubBelong: '',
+        clubSort: '',
+        clubAdmin: '',
+        joinMode: '',
+        status: ''
+      },
+      applyList: [],
+      selectApply: [],
+      applyContent: [],
+      applyContentDialogVisible: false,
       whichIsShow: 'list'
     }
   },
@@ -122,6 +137,78 @@ export default {
         '/api/club/getclubcontact?clubid=' + this.selectClub.id
       )
       this.clubContact = data
+    showClubDetailPanel(val) {
+      //console.log(val)
+      this.selectClub = val
+      this.updateClubForm.clubId = val.id
+      this.updateClubForm.clubName = val.name
+      this.updateClubForm.imgUrl = val.img_logo
+      this.updateClubForm.intro = val.intro
+      this.updateClubForm.clubBelong = val.belong.toString()
+      this.updateClubForm.clubSort = val.sort.toString()
+      this.updateClubForm.clubAdmin = val.user_id
+      this.updateClubForm.joinMode = val.join_mode.toString()
+      this.updateClubForm.status = val.status.toString()
+      this.getApplyList()
+      this.getContact()
+      this.whichIsShow = 'clubPanel'
+    },
+    async updateClubInfo() {
+      let { data } = await axios.post(`/api/club/updateclub`, {
+        clubId: this.updateClubForm.clubId,
+        clubName: this.updateClubForm.clubName,
+        imgUrl: this.updateClubForm.imgUrl,
+        intro: this.updateClubForm.intro,
+        clubBelong: this.updateClubForm.clubBelong,
+        clubSort: this.updateClubForm.clubSort,
+        clubAdmin: this.updateClubForm.clubAdmin,
+        joinMode: this.updateClubForm.joinMode,
+        status: this.updateClubForm.status
+      })
+      if (data.updateClubResult === '1') {
+        this.$notify({
+          title: '成功更新社团',
+          message: '操作成功啦',
+          type: 'success'
+        })
+      } else {
+        this.$notify.error({
+          title: '操作失败',
+          message: '系统错误信息：' + data.errMsg
+        })
+      }
+    },
+    async showApplyModal(val) {
+      this.selectApply = val
+      let { data } = await axios.get(
+        '/api/club/applyContent?clubId=' +
+          this.selectClub.id +
+          '&applyId=' +
+          val.id
+      )
+      this.applyContent = data
+      this.applyContentDialogVisible = true
+    },
+    async handleApply(val) {
+      console.log(val)
+      let { data } = await axios.post(
+        '/api/club/handleApply?applyId=' + this.applyContent[0].apply_id,
+        {
+          handleContent: val
+        }
+      )
+      if (data.handleApplyResultCode == '1') {
+        this.$notify({
+          title: '成功审批',
+          message: '操作成功啦',
+          type: 'success'
+        })
+      } else {
+        this.$notify.error({
+          title: '操作失败',
+          message: '系统错误信息：' + data.errMsg
+        })
+      }
     }
   }
 }
