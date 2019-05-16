@@ -46,6 +46,12 @@
                         el-radio(label="0") 未开始
                         el-radio(label="1") 报名中
                         el-radio(label="2" disabled) 已结束
+        el-row
+            el-col
+                el-form-item(label="签到功能" prop="enable_checkin")
+                    el-radio-group(v-model="addClubForm.enable_checkin")
+                        el-radio(label="0") 关闭
+                        el-radio(label="1") 开启
 
         el-row
             el-col
@@ -70,6 +76,7 @@ export default {
         imgUrl: '',
         intro: '',
         max_people: '',
+        enable_checkin: '',
         start_time: '',
         end_time: '',
         type: '',
@@ -99,6 +106,7 @@ export default {
           maxPeople: max_people,
           activityType: type,
           status: status,
+          enable_checkin: this.addClubForm.enable_checkin,
           startTime: startTime,
           endTime: endTime
         }
