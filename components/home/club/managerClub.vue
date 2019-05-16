@@ -217,10 +217,17 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.clubDetail {
+<style lang="scss" scoped>
+.clubDetailContainer {
+  .clubStatusBar {
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    margin: 20px 0px;
+    padding: 20px 20px;
+    margin-left: 0px;
+  }
   .el-row {
-    border-bottom: solid 1px rgba(240, 240, 240, 1);
+    border-bottom: none;
   }
   .el-col-md-4 {
     color: gray;
