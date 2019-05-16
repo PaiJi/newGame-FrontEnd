@@ -53,7 +53,7 @@ export default {
         console.log('LOGIN!')
       }
       if (data.queryResult == '1') {
-        this.myClubList = data.queryData
+        this.myClubList = data.data
         console.log(this.myClubList.length)
       }
     }

@@ -90,13 +90,12 @@ export default {
         console.log('LOGIN!')
       }
       if (data.queryResult == '1') {
-        this.clubList = data.queryData
+        this.clubList = data.data
       }
     },
     async showClubDetailPanel(val) {
       console.log(val)
-      this.selectClub = val
-      this.whichIsShow = 'clubPanel'
+      this.selectClub = val.clubInfo
       let { data } = await axios.get(
         '/api/club/getclubcontact?clubid=' + this.selectClub.id
       )
