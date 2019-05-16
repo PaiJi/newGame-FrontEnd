@@ -106,9 +106,7 @@ export default {
   },
   methods: {
     async fillData() {
-      console.log('Start GET Data')
-      let { data } = await axios.get('/api/club/getmyclublist')
-      console.log(data)
+      let { data } = await axios.get('/api/club/getMyAdminClubList')
       if (data.getMyClubListResultCode == '0') {
         console.log('LOGIN!')
       }

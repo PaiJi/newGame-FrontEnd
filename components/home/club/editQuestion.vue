@@ -93,7 +93,7 @@ export default {
       this.questionList = data.map(item => {
         // eslint-disable-next-line prettier/prettier
         if (item.type == 'checkbox' || item.type == 'radio') {
-          console.log(item.answer)
+          //console.log(item.answer)
           try {
             item.answer = JSON.parse(item.answer)
           } catch (e) {

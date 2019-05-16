@@ -60,6 +60,7 @@ section.clubQuickBar,
 section.clubActivity {
   margin: 30px;
   padding: 30px;
+  //max-width: 1200px;
 }
 .clubCoverImg {
   width: 100%;
