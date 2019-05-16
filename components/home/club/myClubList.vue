@@ -98,6 +98,7 @@ export default {
     return {
       clubList: [],
       selectClub: [],
+      clubActivityList: [],
       clubContact: [],
       whichIsShow: 'list'
     }
@@ -124,6 +125,14 @@ export default {
         '/api/club/getclubcontact?clubid=' + this.selectClub.id
       )
       this.clubContact = data
+      this.getActivityData(val)
+      this.whichIsShow = 'clubPanel'
+    },
+    async getActivityData(val) {
+      let { data } = await axios.get(
+        '/api/activity/activityOfClub?clubId=' + val.id
+      )
+      this.clubActivityList = data
     }
   }
 }
