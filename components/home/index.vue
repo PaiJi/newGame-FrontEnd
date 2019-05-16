@@ -13,14 +13,26 @@
                 el-card
                     h5 设计中
                     span COMING SOON
-        el-row
+        el-row.indexCarousel
             el-col
-                el-carousel(type="card" :interval="4000")
+                el-carousel( :interval="4000")
                     el-carousel-item
-                    el-carousel-item
-                    el-carousel-item
+                        img(:style="{backgroundImage:'url(https://storge-1251771711.cos.ap-shanghai.myqcloud.com/visitor-resouces/img/15.jpg)'}")
 
 </template>
+<style lang="scss" scoped>
+.indexCarousel {
+  margin: 20px 0px;
+  .el-carousel__item {
+    img {
+      width: 100%;
+      height: 300px;
+      background-size: cover;
+    }
+  }
+}
+</style>
+
 <script>
 import axios from 'axios'
 export default {
