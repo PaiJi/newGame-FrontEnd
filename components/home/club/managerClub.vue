@@ -191,6 +191,11 @@ export default {
           val.id
       )
       this.applyContent = data
+      for (const item of this.applyContent) {
+        if (item.type == 'checkbox') {
+          item.answer = JSON.parse(item.answer)
+        }
+      }
       this.applyContentDialogVisible = true
     },
     async handleApply(val) {
