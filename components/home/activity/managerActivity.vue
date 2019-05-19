@@ -25,7 +25,7 @@
             .clubPanel
                 el-tabs(type="border-card")
                     el-tab-pane(label="修改活动信息").clubDetail
-                        el-form(:model="updateActivityForm" label-width="100px")
+                        el-form(:model="updateActivityForm" label-width="100px" :rules="rules" ref="ruleForm")
                             el-row
                                 el-col(:md='20')
                                     el-form-item(label="活动名称" prop="name")
@@ -71,7 +71,7 @@
                             el-row
                                 el-col
                                     el-form-item
-                                        el-button(type="primary" @click="updateActivityInfo") 更新信息
+                                        el-button(type="primary" @click="submitForm('ruleForm')") 更新信息
                                         el-button(type="danger" @click="deteleActivity") 删除活动
                     el-tab-pane(label="查看报名情况")
                         el-table(:data="activityApplyListData" style="width:100%")
@@ -129,7 +129,25 @@ export default {
         type: '',
         status: ''
       },
-      whichIsShow: 'list'
+      whichIsShow: 'list',
+      rules: {
+        name: [{ required: true, message: '请输入活动名称', trigger: 'blur' }],
+        imgUrl: [
+          { required: true, message: '请输入海报地址', trigger: 'blur' }
+        ],
+        intro: [{ required: true, message: '请输入活动介绍', trigger: 'blur' }],
+        enable_checkin: [
+          { required: true, message: '请选择活动是否签到', trigger: 'blur' }
+        ],
+        start_time: [
+          { required: true, message: '请选择活动开始时间', trigger: 'blur' }
+        ],
+        end_time: [
+          { required: true, message: '请选择活动结束时间', trigger: 'blur' }
+        ],
+        type: [{ required: true, message: '请选择活动类型', trigger: 'blur' }],
+        status: [{ required: true, message: '请选择活动状态', trigger: 'blur' }]
+      }
     }
   },
   mounted() {
@@ -169,6 +187,18 @@ export default {
       this.updateActivityForm.end_time = val.end_time
       this.updateActivityForm.status = val.status.toString()
       this.whichIsShow = 'clubPanel'
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.updateActivityInfo()
+        } else {
+          this.$notify.error({
+            title: '填写不完整',
+            message: '请将表单填写完整'
+          })
+        }
+      })
     },
     async updateActivityInfo() {
       let { data } = await axios.post(
