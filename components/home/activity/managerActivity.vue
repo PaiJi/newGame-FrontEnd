@@ -88,15 +88,15 @@
                                 el-col(:span='4')
                                     p 最大报名人数：{{selectActivity.max_people}}
                                 el-col(:span='4')
-                                    p 实际报名人数：
+                                    p 实际报名人数：{{selectActivity.now_people}}
                                 el-col(:span='4')
-                                    p 已签到人数：
+                                    p 已签到人数： {{activiryCheckinList.length}}
                             el-row
                                 el-col
                                     h4 签到情况：
                             el-row
                                 el-col
-                                    el-progress(type="circle" :percentage="25")
+                                    el-progress(type="circle" :percentage="activiryCheckinList.length/selectActivity.now_people")
                         .checin-table
                             el-table(:data="activiryCheckinList")
                                 el-table-column(label="姓名" prop="username")
