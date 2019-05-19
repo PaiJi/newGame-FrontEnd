@@ -3,64 +3,45 @@
         el-header(style="height:auto;")
             myHeader
         el-main
-            section.clubQuickBar
-                el-row(:gutter='20')
-                    el-col(:span='8')
-                        .clubCoverImg(:style="{backgroundImage: `url(`+clubDetail.img_logo+`)`}")
-                    el-col(:span='16')
-                        .clubTitle
-                            h3 {{clubDetail.name}}
-                        .clubInfo
-                            el-row
-                                el-col(:span='2')
-                                    span.title 创立时间:
-                                el-col(:span='16')
-                                    span {{clubDetail.create_time}}
-                            el-row
-                                el-col(:span='2')
-                                    span.title 所属:
-                                el-col(:span='16')
-                                    span {{clubDetail.belong}}
-                            el-row
-                                el-col(:span='2')
-                                    span.title 现有成员:
-                                el-col(:span='16')
-                                    span {{clubDetail.members}}
-                            el-row
-                                el-col(:span='2')
-                                    span.title 加入模式:
-                                el-col(:span='16')
-                                    span {{clubDetail.join_mode}}
-                            el-row
-                                el-col(:span='2')
-                                    span.title 当前状态:
-                                el-col(:span='16')
-                                    span {{clubDetail.status}}
-                            el-row
-                                el-col(:span='2')
-                                    span.title 社团简介:
-                                el-col(:span='16')
-                                    span {{clubDetail.intro}}
-                        .clubPanel
-                            el-row
-                                el-col(:offset='2' :span='16')
-                                    el-button(type="primary" @click="joinClub") 立刻加入
-            section.clubActivity
-                el-row(:gutter="20")
-                    el-col(:span="15")
-                        h5 康康这个社团最近的大新闻
-                    el-col(:offset='2' :span="6")
-                        h5 放个公告，管理员信息
-                el-row(:gutter="20")
-                    el-col(:span="15")
-                        p 抓鸽子大赛顺利举行！
+            .container
+                section.clubQuickBar
+                    el-row(:gutter='20')
+                        el-col(:md="10" :lg="10")
+                            .clubCoverImg(:style="{backgroundImage: `url(`+clubDetail.img_logo+`)`}")
+                        el-col(:md="14" :lg="14")
+                            .clubTitle
+                                h2 {{clubDetail.name}}
+                            .clubInfo
+                                el-form
+                                    el-form-item(label="创立时间:")
+                                        span {{clubDetail.create_time}}
+                                    el-form-item(label="所属:")
+                                        span {{clubDetail.belong}}
+                                    el-form-item(label="现有成员:")
+                                        span {{clubDetail.members}}
+                                    el-form-item(label="加入模式:")
+                                        span {{clubDetail.join_mode}}
+                                    el-form-item(label="当前状态:")
+                                        span {{clubDetail.status}}
+                                    el-form-item(label="社团简介:").longTextKill
+                                        span {{clubDetail.intro}}
+                                    el-form-item.join_button
+                                        el-button(type="primary" @click="joinClub") 立刻加入
+                section.clubActivity
+                    el-row
+                        el-col(:md="16" :lg="16").clubActivityList
+                            h4 社团活动
+                            el-table(:data="clubActivityList" @row-click="openActivity" style="width:100%")
+                                el-table-column(prop="name" label="活动名称")
+                                el-table-column(prop="start_time" label="活动开始时间")
+                        el-col(:md="8" :lg="8").clubIntro
+                            h4 社团详情
+                            p  {{clubDetail.intro}}
 </template>
 <style lang="scss">
-section.clubQuickBar,
-section.clubActivity {
-  margin: 30px;
-  padding: 30px;
-  //max-width: 1200px;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 .clubCoverImg {
   width: 100%;
@@ -70,17 +51,36 @@ section.clubActivity {
   display: inline-block;
 }
 .clubInfo {
-  margin: 20px 0px;
-  .el-row {
-    margin: 10px 0px;
+  margin: 10px 0px;
+  .el-form-item {
+    margin-bottom: 0px;
+    .el-form-item__label {
+      color: #99a2aa;
+      //font-size: 14px;
+    }
   }
-  .el-col-2 {
-    margin-right: 10px;
+  .longTextKill {
+    span {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      display: block;
+      width: 75%;
+    }
   }
-  span.title {
-    color: #99a2aa;
-    font-size: 14px;
-    //margin-right: 15px;
+  .join_button {
+    .el-button {
+      width: 200px;
+      margin-top: 20px;
+    }
+  }
+  @media (max-width: 700px) {
+    .join_button {
+      .el-button {
+        width: 100%;
+        margin-top: 20px;
+      }
+    }
   }
 }
 .clubPanel {
@@ -91,9 +91,20 @@ section.clubActivity {
 section.clubActivity {
   //background-color: ;
   .el-col {
-    background-color: #f4f5f7;
+    //background-color: #f4f5f7;
     padding: 20px;
     border-radius: 5px;
+  }
+  .clubIntro {
+    background-color: #f4f5f7;
+    border-radius: 0px;
+    h4 {
+      color: #303133;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #606266;
+    }
   }
 }
 </style>
@@ -109,12 +120,14 @@ export default {
     return {
       paramValue: '',
       clubDetail: [],
+      clubActivityList: [],
       userId: myHeader.data().userId
     }
   },
   mounted() {
     this.paramValue = this.$route.params.id
     this.getClubDetail()
+    this.getClubActivity()
   },
   methods: {
     async getClubDetail() {
@@ -122,6 +135,12 @@ export default {
         '/api/club/getclubdetail?clubid=' + this.paramValue
       )
       this.clubDetail = data
+    },
+    async getClubActivity() {
+      let { data } = await axios.get(
+        '/api/activity/activityofclub?clubId=' + this.paramValue
+      )
+      this.clubActivityList = data
     },
     async joinClub() {
       let { data } = await axios.get(
@@ -140,8 +159,9 @@ export default {
         //告诉用户需要填表
         this.$notify.info({
           title: '需要填写表单',
-          message: data.errMsg
+          message: '正在将您重定向至表单页面'
         })
+        this.$router.push({ path: '/club/apply/' + this.paramValue })
       }
       if (data.joinClubResultCode === '0' && data.clubRequest === '2') {
         //告诉用户社团需要邀请，加入失败
@@ -163,6 +183,10 @@ export default {
           message: data.errMsg
         })
       }
+    },
+    openActivity(event) {
+      console.log(event)
+      this.$router.push({ path: '/activity/' + event.id })
     }
   }
 }
