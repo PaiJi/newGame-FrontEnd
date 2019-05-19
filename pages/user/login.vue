@@ -1,67 +1,32 @@
-<template>
-  <div class="container">
-    <div class="logo"/>
-    <div class="input-area">
-      <el-form
-        ref="ruleForm"
-        :model="ruleForm"
-        :rules="rules"
-        :hide-required-asterisk="true"
-        label-width="100px"
-        class="demo-ruleForm"
-      >
-        <el-form-item label="邮箱地址" prop="email">
-          <el-input v-model="ruleForm.email"/>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="ruleForm.password" type="password"/>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-          <el-button @click="$router.push({ path: '/user/register' })">注册</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-  </div>
+<template lang="pug">
+  el-container
+    el-header(style="height:auto;")
+      myHeader
+    el-main
+      el-row(:gutter='20' type='flex' justify="center").registerForm
+        //el-col(:lg='8' :md='8' :sm='8').registerImg
+          .bg-purple
+        el-col(:lg='8' :md='9' :sm='10')
+          .grid-content
+            el-form(:model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="100px")
+              el-form-item(label="邮箱地址" prop="email")
+                el-input(v-model="ruleForm.email" type="email")
+              el-form-item(label="密码" prop="password")
+                el-input(v-model="ruleForm.password" type="password")
+              el-form-item
+                <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                <el-button @click="$router.push({ path: '/user/register' })">注册</el-button>
 </template>
 <style lang="scss">
-html {
-  height: 100%;
-}
-body {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.container {
-  width: 400px;
-  height: 400px;
-  margin: 0 auto;
-  border: 1px solid #dadce0;
-  border-radius: 8px;
-}
-.logo {
-  //background-image: url("~assets/img/login.png");
-  height: 200px;
-  background: url('~assets/img/login.png');
-  background-size: cover;
-}
-.input-area {
-  padding: 20px;
-}
-.login-input {
-  width: auto;
-  padding: 0px 10px 0px 10px;
-}
-.el-col {
-  border-radius: 4px;
-}
 </style>
 
 <script>
 import axios from 'axios'
+import myHeader from '~/components/header.vue'
 export default {
+  components: {
+    myHeader
+  },
   data() {
     return {
       ruleForm: {
@@ -78,6 +43,17 @@ export default {
             trigger: 'change'
           },
           { max: 255, message: '长度不得多于255个字符', trigger: 'blur' }
+        ],
+        password: [
+          {
+            required: true,
+            message: '密码忘记填了！',
+            trigger: 'blur'
+          },
+          {
+            min: 6,
+            message: '太短啦！再长点'
+          }
         ]
       }
     }
@@ -110,7 +86,7 @@ export default {
       console.log(data)
     },
     redirectpage() {
-      window.location.href = '/home/portal'
+      this.$router.push({ path: '/home/portal' })
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
