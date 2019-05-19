@@ -73,22 +73,36 @@ section.showErr {
   display: inline-block;
 }
 .clubInfo {
-  margin: 20px 0px;
-  .el-row {
-    margin: 10px 0px;
+  margin: 10px 0px;
+  .el-form-item {
+    margin-bottom: 0px;
+    .el-form-item__label {
+      color: #99a2aa;
+      //font-size: 14px;
+    }
   }
-  .el-col-2 {
-    margin-right: 10px;
+  .longtextKill {
+    span {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      display: block;
+      width: 75%;
+    }
   }
-  span.title {
-    color: #99a2aa;
-    font-size: 14px;
-    //margin-right: 15px;
+  .join_button {
+    .el-button {
+      width: 200px;
+      margin-top: 20px;
+    }
   }
-}
-.clubPanel {
-  .el-button {
-    width: 200px;
+  @media (max-width: 700px) {
+    .join_button {
+      .el-button {
+        width: 100%;
+        margin-top: 20px;
+      }
+    }
   }
 }
 </style>
@@ -103,6 +117,7 @@ export default {
   data() {
     return {
       paramValue: '',
+      showError: false,
       clubDetail: [],
       userId: myHeader.data().userId
     }
@@ -116,7 +131,15 @@ export default {
       let { data } = await axios.get(
         '/api/activity/activityDetail?activityId=' + this.paramValue
       )
-      this.clubDetail = data
+      if (data != null) {
+        this.clubDetail = data
+        //console.log(data)
+      } else {
+        this.showError = true
+        setTimeout(() => {
+          this.$router.push({ path: '/' })
+        }, 5000)
+      }
     },
     async joinActivity() {
       let { data } = await axios.get(
