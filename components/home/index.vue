@@ -8,10 +8,10 @@
             el-col(:span="8")
                 el-card
                     h5 我的活动
-                    span 2
-            el-col(:span="8")
+                    span {{myActivityList.length}}
+            //el-col(:span="8")
                 el-card
-                    h5 设计中
+                    h5 
                     span COMING SOON
         el-row.indexCarousel
             el-col
@@ -38,23 +38,30 @@ import axios from 'axios'
 export default {
   data() {
     return {
-      myClubList: []
+      myClubList: [],
+      myActivityList: []
     }
   },
   mounted() {
-    this.fillData()
+    this.getUserClubList()
+    this.getUserActivityList()
   },
   methods: {
-    async fillData() {
-      console.log('Start GET Data')
+    async getUserClubList() {
       let { data } = await axios.get('/api/club/getmyclublist')
-      console.log(data)
+      //console.log(data)
       if (data.getMyClubListResultCode == '0') {
-        console.log('LOGIN!')
+        //console.log('LOGIN!')
       }
       if (data.queryResult == '1') {
         this.myClubList = data.data
-        console.log(this.myClubList.length)
+        //console.log(this.myClubList.length)
+      }
+    },
+    async getUserActivityList() {
+      let { data } = await axios.get('/api/activity/getmyactivity')
+      if (data.queryResult == '1') {
+        this.myActivityList = data.queryData
       }
     }
   }
