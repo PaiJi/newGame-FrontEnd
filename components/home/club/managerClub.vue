@@ -52,7 +52,7 @@
                                     el-form-item(label="加入方式" prop="joinmode")
                                         el-radio-group(v-model="updateClubForm.joinMode")
                                             el-radio(label="1") 人工审核
-                                            el-radio(label="2" disabled) 仅邀请
+                                            //el-radio(label="2" disabled) 仅邀请
                                             el-radio(label="3") 无限制
                                             el-radio(label="0") 不允许新成员
                             el-row
@@ -60,9 +60,9 @@
                                     el-form-item(label="社团状态" prop="status")
                                         el-radio-group(v-model="updateClubForm.status")
                                             el-radio(label="2") 筹备中
-                                            el-radio(label="1" disabled) 正常运营
-                                            el-radio(label="3" disabled) 运营异常
-                                            el-radio(label="0" disabled) 已注销
+                                            el-radio(label="1") 正常运营
+                                            el-radio(label="3") 运营异常
+                                            el-radio(label="0") 已注销
                             el-row
                                 el-col
                                     el-form-item
