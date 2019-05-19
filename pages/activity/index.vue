@@ -17,7 +17,7 @@
                                     .card-info
                                         .card-title
                                             h3(style="display:inline-block") {{item.name}}
-                                            el-tag(type="info") 技术类
+                                            el-tag(type="info") {{item.type}}
                                         .card-intro
                                             p {{item.intro}}
                     el-row(:gutter='20')
@@ -28,7 +28,7 @@
                                     .card-info
                                         .card-title(style="")
                                             h3(style="display:inline-block") {{item.name}}
-                                            el-tag(type="info") 技术类
+                                            el-tag(type="info") {{item.type}}
                                         .card-intro
                                             p {{item.intro}}
 </template>

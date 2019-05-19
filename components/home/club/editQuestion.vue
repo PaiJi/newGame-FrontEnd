@@ -5,7 +5,7 @@
         .control-area
             el-button(type="primary" plain @click="addQuestion") 新增问题
             el-button(type="success" plain @click="saveQuestion") 保存问卷
-        el-collapse(v-model="currentItem" @change="handleChange" accordion)
+        el-collapse(v-model="currentItem" accordion)
             draggable(v-model="questionList")
                 transition-group
                     div(v-for="(item,index) in questionList" :key='item.id')
@@ -52,7 +52,7 @@
                                             el-button(@click="questionList[index].answer.pop('')" type="warning") 删除
                             el-row
                                 el-col(style="text-align:right;")
-                                    el-button(type="danger" plain @click="deleteQuestion(index)") 删除问题
+                                    el-button(type="danger" plain @click="deleteQuestion(item.id,index)") 删除问题
 </template>
 <style lang="scss" scoped>
 .control-area {
@@ -89,7 +89,7 @@ export default {
       let { data } = await axios.get(
         '/api/club/getquestion?clubId=' + this.selectClub
       )
-      console.log(data)
+      //console.log(data)
       this.questionList = data.map(item => {
         // eslint-disable-next-line prettier/prettier
         if (item.type == 'checkbox' || item.type == 'radio') {
@@ -103,9 +103,9 @@ export default {
         return item
       })
     },
-    handleChange(val) {
-      console.log(val)
-    },
+    // handleChange(val) {
+    //   //console.log(val)
+    // },
     addQuestion() {
       let que = new Object()
       que.id = Math.floor(Math.random() * 100000)
@@ -115,8 +115,26 @@ export default {
       que.required = 1
       this.questionList.push(que)
     },
-    deleteQuestion(num) {
+    async deleteQuestion(quesitonId, num) {
       console.log(num)
+      let { data } = await axios.post(
+        '/api/club/deletequestion?clubId=' + this.selectClub,
+        {
+          questionId: quesitonId
+        }
+      )
+      if (data.DeleteQuestionResultCode == '1') {
+        this.$notify({
+          title: '删除成功',
+          message: '该问题已被删除',
+          type: 'success'
+        })
+      } else {
+        this.$notify.error({
+          title: '删除错误',
+          message: data.errMsg
+        })
+      }
       this.questionList.splice(num, 1)
     },
     async saveQuestion() {
@@ -129,7 +147,19 @@ export default {
           data: this.questionList
         }
       )
-      console.log(data)
+      ///console.log(data)
+      if (data.queryResult == '1') {
+        this.$notify({
+          title: '保存成功',
+          message: '表单已更新',
+          type: 'success'
+        })
+      } else {
+        this.$notify.error({
+          title: '保存失败',
+          message: data.errMsg
+        })
+      }
     },
     addOption(index) {
       this.questionList[index].answer.push('')

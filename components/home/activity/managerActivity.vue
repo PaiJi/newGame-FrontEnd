@@ -84,19 +84,16 @@
                             el-table-column(label="Wechat" prop="wechat")
                     el-tab-pane(label="签到列表")
                         .checkin-progress
-                            el-row
-                                el-col(:span='4')
+                            el-row(type="flex" justify="space-between")
+                                el-col(:span='8')
                                     p 最大报名人数：{{selectActivity.max_people}}
-                                el-col(:span='4')
+                                el-col(:span='8')
                                     p 实际报名人数：{{selectActivity.now_people}}
-                                el-col(:span='4')
+                                el-col(:span='8')
                                     p 已签到人数： {{activiryCheckinList.length}}
                             el-row
-                                el-col
-                                    h4 签到情况：
-                            el-row
-                                el-col
-                                    el-progress(type="circle" :percentage="activiryCheckinList.length/selectActivity.now_people")
+                                el-col(:span='6')
+                                    el-progress(type="circle" :percentage="checkinPercentage" status="text") 签到状态<br>{{checkinPercentage}}%
                         .checin-table
                             el-table(:data="activiryCheckinList")
                                 el-table-column(label="姓名" prop="username")
@@ -118,6 +115,7 @@ export default {
       selectActivity: [],
       activityApplyListData: [],
       activiryCheckinList: [],
+      checkinPercentage: 0,
       updateActivityForm: {
         name: '',
         imgUrl: '',
@@ -250,6 +248,9 @@ export default {
         '/api/activity/activityCheckinList?activityId=' + this.selectActivity.id
       )
       this.activiryCheckinList = data
+      this.checkinPercentage = Math.round(
+        (this.activiryCheckinList.length / this.selectActivity.now_people) * 100
+      )
     }
   }
 }
@@ -271,6 +272,11 @@ export default {
   }
   .el-col-md-4 {
     color: gray;
+  }
+  .checkin-progress {
+    .el-row {
+      padding: 20px 10px;
+    }
   }
 }
 </style>

@@ -18,10 +18,10 @@
             .clubPanel
                 el-tabs(type="border-card")
                     el-tab-pane(label="修改社团信息").clubDetail
-                        el-form(:model="updateClubForm" label-width="100px")
+                        el-form(:model="updateClubForm" :rules="rules" ref="ruleForm" label-width="100px")
                             el-row
                                 el-col(:span="12")
-                                    el-form-item(label="社团名称" prop="name")
+                                    el-form-item(label="社团名称" prop="clubName")
                                         el-input(v-model="updateClubForm.clubName")
                             el-row
                                 el-col(:span="12")
@@ -45,11 +45,11 @@
                                             el-option(label="娱乐类" value="2")
                             el-row
                                 el-col(:span="12")
-                                    el-form-item(label="社团负责人" prop="clubadmin")
-                                        el-input(v-model="updateClubForm.clubAdmin" placeholder="输入该用户的UID")
+                                    el-form-item(label="社团负责人" prop="clubAdmin")
+                                        el-input(v-model="updateClubForm.clubAdmin" placeholder="输入该用户的UID" disabled)
                             el-row
                                 el-col
-                                    el-form-item(label="加入方式" prop="joinmode")
+                                    el-form-item(label="加入方式" prop="joinMode")
                                         el-radio-group(v-model="updateClubForm.joinMode")
                                             el-radio(label="1") 人工审核
                                             //el-radio(label="2" disabled) 仅邀请
@@ -66,7 +66,7 @@
                             el-row
                                 el-col
                                     el-form-item
-                                        el-button(type="primary" @click="updateClubInfo") 更新信息
+                                        el-button(type="primary" @click="submitForm('ruleForm')") 更新信息
                     el-tab-pane(label="修改纳新问卷")
                         editQuestion(v-bind:selectClub="selectClub.id")
                     el-tab-pane(label="审批管理")
@@ -78,9 +78,10 @@
                             el-table-column(label="WECHAT" prop="userInfo.wechat")
                             el-table-column(label="学院" prop="userInfo.department")
                             el-table-column(label="专业" prop="userInfo.major")
+                            el-table-column(label="处理状态" prop="status")
                         el-dialog(title="表单详情" :visible.sync="applyContentDialogVisible" width="80%")
-                            el-form(label-position="top")
-                                el-form-item(v-for="(item,index) in applyContent" :label="index+'.'+item.question")
+                            el-form(label-position="top").applyHandleForm
+                                el-form-item(v-for="(item,index) in applyContent" :label="index+1+'.'+item.question")
                                     p 答案：{{item.answer}}
                             span(slot="footer")
                                 el-button(type="success" @click="handleApply(true)" :disabled="selectApply.status!=`待审核`") 通过
@@ -113,7 +114,29 @@ export default {
       selectApply: [],
       applyContent: [],
       applyContentDialogVisible: false,
-      whichIsShow: 'list'
+      whichIsShow: 'list',
+      rules: {
+        clubName: [
+          { required: true, message: '请输入社团名称', trigger: 'blur' }
+        ],
+        imgUrl: [
+          { required: true, message: '请输入社团LOGO地址', trigger: 'blur' }
+        ],
+        intro: [{ required: true, message: '请填写社团介绍', trigger: 'blur' }],
+        clubBelong: [
+          { required: true, message: '请选择社团归属', trigger: 'blur' }
+        ],
+        clubSort: [
+          { required: true, message: '请选择社团分类', trigger: 'blur' }
+        ],
+        clubAdmin: [
+          { required: true, message: '请输入社团管理员ID', trigger: 'blur' }
+        ],
+        joinMode: [
+          { required: true, message: '请选择社团加入方式', trigger: 'blur' }
+        ],
+        status: [{ required: true, message: '请选择社团状态', trigger: 'blur' }]
+      }
     }
   },
   mounted() {
@@ -156,6 +179,18 @@ export default {
       this.getApplyList()
       this.getContact()
       this.whichIsShow = 'clubPanel'
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.updateClubInfo()
+        } else {
+          this.$notify.error({
+            title: '填写不完整',
+            message: '请将表单填写完整'
+          })
+        }
+      })
     },
     async updateClubInfo() {
       let { data } = await axios.post(`/api/club/updateclub`, {
@@ -201,7 +236,7 @@ export default {
     async handleApply(val) {
       console.log(val)
       let { data } = await axios.post(
-        '/api/club/handleApply?applyId=' + this.applyContent[0].apply_id,
+        '/api/club/handleApply?applyId=' + this.selectApply.id,
         {
           handleContent: val
         }
@@ -224,7 +259,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .clubDetailContainer {
   .clubStatusBar {
     border-radius: 4px;
@@ -238,6 +273,20 @@ export default {
   }
   .el-col-md-4 {
     color: gray;
+  }
+}
+.applyHandleForm {
+  .el-form-item {
+    .el-form-item__label {
+      font-size: 20px;
+      color: #303133;
+    }
+    .el-form-item__content {
+      p {
+        font-size: 18px;
+        color: #606266;
+      }
+    }
   }
 }
 </style>

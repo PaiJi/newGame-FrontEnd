@@ -198,22 +198,19 @@ export default {
   },
   methods: {
     async register() {
-      let { data } = await axios.post(
-        `http://localhost:2333/newGame-BackEnd/public/index.php/api/user/register`,
-        {
-          email: this.ruleForm.email,
-          password: this.ruleForm.password,
-          realname: this.ruleForm.realname,
-          nickname: this.ruleForm.nickname,
-          gender: this.ruleForm.gender,
-          phone: this.ruleForm.phone,
-          age: this.ruleForm.age,
-          qq: this.ruleForm.qq,
-          wechat: this.ruleForm.wechat,
-          department: this.ruleForm.department,
-          major: this.ruleForm.major
-        }
-      )
+      let { data } = await axios.post(`/api/user/register`, {
+        email: this.ruleForm.email,
+        password: this.ruleForm.password,
+        realname: this.ruleForm.realname,
+        nickname: this.ruleForm.nickname,
+        gender: this.ruleForm.gender,
+        phone: this.ruleForm.phone,
+        age: this.ruleForm.age,
+        qq: this.ruleForm.qq,
+        wechat: this.ruleForm.wechat,
+        department: this.ruleForm.department,
+        major: this.ruleForm.major
+      })
       console.log(data.registerStatus === '0')
       if (data.registerStatus === '0') {
         this.$notify.error({

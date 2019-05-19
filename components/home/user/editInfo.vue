@@ -147,10 +147,12 @@ export default {
   },
   methods: {
     async getUserInfo() {
-      let { data } = await axios.get('/api/user/getuserinfo')
+      let { data } = await axios.get('/api/user/getuserinfo?origin=true')
       console.log(data.loginStatus == true)
       if (data.loginStatus == 'true') {
         this.ruleForm = data.userInfo
+        this.ruleForm.department = this.ruleForm.department.toString()
+        this.ruleForm.major = this.ruleForm.major.toString()
       }
     },
     async updateInfo() {

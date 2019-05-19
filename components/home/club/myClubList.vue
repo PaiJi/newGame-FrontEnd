@@ -8,6 +8,13 @@
                         el-table-column(label="社团简介" prop="clubInfo.intro" width="")
                         el-table-column(label="社团人数" prop="clubInfo.members" width="")
                         el-table-column(label="注册时间" prop="clubInfo.create_time" width="")
+        .clubDetailContainer(v-if="whichIsShow=='clubPanel'")
+            el-row.clubStatusBar
+                el-col(:span='4')
+                    el-button(@click="whichIsShow='list'") 返回列表
+                el-col(:span='20')
+                    h4 {{selectClub.name}}
+                    span 详细信息
         .clubPanel(v-if="whichIsShow=='clubPanel'")
             el-tabs(type="border-card")
                 el-tab-pane(label="社团详情").clubDetail
@@ -81,7 +88,7 @@
                                     span(style='margin-left: 10px') {{ scope.row.end_time }}
                             el-table-column(label='操作')
                                 template(slot-scope='scope')
-                                    el-button(size='mini', type='success', @click='handleDelete(scope.row.activity_id)') 加入
+                                    el-button(size='mini', type='success', @click='joinActivity(scope.row.id)') 加入
                 el-tab-pane(label="社团通讯录")
                     el-table(:data="clubContact")
                         el-table-column(label="姓名" prop="username" width="")
@@ -135,14 +142,50 @@ export default {
         '/api/activity/activityOfClub?clubId=' + val.clubInfo.id
       )
       this.clubActivityList = data
+    },
+    async joinActivity(Id) {
+      let { data } = await axios.get(
+        '/api/activity/joinactivity?activityId=' + Id
+      )
+      console.log(data)
+      if (data.queryResult === '1') {
+        //弹窗告知用户已经加入
+        this.$notify({
+          title: '操作成功',
+          message: '成功报名该活动，请记得按时参与哦',
+          type: 'success'
+        })
+      }
+      if (data.queryResult === '0') {
+        //告诉用户社团需要邀请，加入失败
+        this.$notify.error({
+          title: '操作失败',
+          message: data.errMsg
+        })
+      }
     }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .clubDetail {
   .el-row {
     border-bottom: solid 1px rgba(240, 240, 240, 1);
+  }
+  .el-col-md-4 {
+    color: gray;
+  }
+}
+.clubDetailContainer {
+  .clubStatusBar {
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    margin: 20px 0px;
+    padding: 20px 20px;
+    margin-left: 0px;
+  }
+  .el-row {
+    border-bottom: none;
   }
   .el-col-md-4 {
     color: gray;

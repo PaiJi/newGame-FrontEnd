@@ -6,10 +6,13 @@
             section.clubInfo
                 el-row
                     el-col
-                        h3 XX社团纳新表单
+                        h3 {{clubDetail.name}}——纳新表单
+                el-row.clubIntro
+                    el-col
+                        p {{clubDetail.intro}}
             section.questionArea
                 el-form(:model="answerForm"  ref="form" label-position="top")
-                    el-form-item(v-for="(item,index) in questionList" :label="item.msg" prop="answer")
+                    el-form-item(v-for="(item,index) in questionList" :label="index+1+'.'+item.msg" prop="answer")
                         el-input(v-if="item.type=='input'" v-model="answerForm.answerList[index].answer")
                         el-input(v-if="item.type=='number'" v-model="answerForm.answerList[index].answer")
                         el-radio-group(v-if="item.type=='radio'" v-model="answerForm.answerList[index].answer")
@@ -21,9 +24,16 @@
 
 </template>
 <style lang="scss">
-.el-main {
-  // max-width: 1100px;
-  // margin: 0 auto;
+section.clubInfo {
+  margin: 20px 0px;
+  h3 {
+    font-size: 22px;
+    color: #303133;
+  }
+  .clubIntro {
+    margin: 20px 0px;
+    color: #606266;
+  }
 }
 </style>
 

@@ -69,6 +69,7 @@ export default {
   },
   mounted() {
     this.getUserId()
+    this.checkSystem()
   },
   methods: {
     async getUserId() {
@@ -106,6 +107,26 @@ export default {
         this.logout()
       }
       //this.$router.push({ path: '/home/portal' })
+    },
+    async checkSystem() {
+      let { data } = await axios.get('/api/index/getsystemstatus')
+      if (data == 'false') {
+        this.$alert('系统已被管理员关闭。', '系统级提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `action: ${action}`
+            })
+          }
+        })
+      }
+      if (data.execResult == '0') {
+        this.$notify.info({
+          title: '虽然几率很低但是真的发生了',
+          message: data.errMsg
+        })
+      }
     }
   }
 }

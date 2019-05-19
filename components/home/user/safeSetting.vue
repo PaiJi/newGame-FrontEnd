@@ -53,8 +53,8 @@ export default {
     },
     async updateInfo() {
       let { data } = await axios.post(`/api/user/updateUserAccountSafeInfo`, {
-        email: this.ruleForm.username,
-        password: this.ruleForm.nickname
+        email: this.ruleForm.email,
+        password: this.ruleForm.password
       })
       if (data.updateInfoResultCode === '0') {
         this.$notify.error({

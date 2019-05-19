@@ -1,40 +1,40 @@
 <template lang="pug">
-    el-form(:model="addClubForm" label-width="100px").container
+    el-form(:model="addClubForm" :rules="rules" ref="ruleForm" label-width="100px").container
         el-row.form-title
             el-col
                 h2 申请社团
                 hr
         el-row
-            el-col(:span="12")
-                el-form-item(label="社团名称" prop="name")
+            el-col(:span="20")
+                el-form-item(label="社团名称" prop="clubName")
                     el-input(v-model="addClubForm.clubName")
         el-row
-            el-col(:span="12")
+            el-col(:span="20")
                 el-form-item(label="LOGO地址" prop="imgUrl")
                     el-input(v-model="addClubForm.imgUrl")
         el-row
-            el-col(:span="12")
+            el-col(:span="20")
                 el-form-item(label="社团简介" prop="intro")
                     el-input(type="textarea" :row=4 placeholder="随便写点什么，让大家了解你的社团" v-model="addClubForm.intro")
         el-row
-            el-col(:span="12")
+            el-col(:span="20")
                 el-form-item(label="社团归属" prop="clubBelong")
                     el-select(placeholder="请选择社团归属" v-model="addClubForm.clubBelong")
                         el-option(label="电子信息工程" value="2")
                         el-option(label="团委" value="1")
         el-row
-            el-col(:span="12")
+            el-col(:span="20")
                 el-form-item(label="社团分类" prop="clubSort")
                     el-select(placeholder="请选择社团类别" v-model="addClubForm.clubSort")
                         el-option(label="技术类" value="1")
                         el-option(label="娱乐类" value="2")
         el-row
-            el-col(:span="12")
-                el-form-item(label="社团负责人" prop="clubadmin")
+            el-col(:span="20")
+                el-form-item(label="社团负责人" prop="clubAdmin")
                     el-input(v-model="addClubForm.clubAdmin" placeholder="输入该用户的UID")
         el-row
             el-col
-                el-form-item(label="加入方式" prop="joinmode")
+                el-form-item(label="加入方式" prop="joinMode")
                     el-radio-group(v-model="addClubForm.joinMode")
                         el-radio(label="1") 人工审核
                         //el-radio(label="2") 仅邀请
@@ -51,7 +51,7 @@
         el-row
             el-col
                 el-form-item
-                    el-button(type="primary" @click="add") 立即创建
+                    el-button(type="primary" @click="submitForm('ruleForm')") 立即创建
 </template>
 <style lang="scss">
 .form-title {
@@ -72,11 +72,45 @@ export default {
         clubSort: '',
         clubAdmin: '',
         joinMode: '',
-        status: '2'
+        status: ''
+      },
+      rules: {
+        clubName: [
+          { required: true, message: '请输入社团名称', trigger: 'blur' }
+        ],
+        imgUrl: [
+          { required: true, message: '请输入社团LOGO地址', trigger: 'blur' }
+        ],
+        intro: [{ required: true, message: '请填写社团介绍', trigger: 'blur' }],
+        clubBelong: [
+          { required: true, message: '请选择社团归属', trigger: 'blur' }
+        ],
+        clubSort: [
+          { required: true, message: '请选择社团分类', trigger: 'blur' }
+        ],
+        clubAdmin: [
+          { required: true, message: '请输入社团管理员ID', trigger: 'blur' }
+        ],
+        joinMode: [
+          { required: true, message: '请选择社团加入方式', trigger: 'blur' }
+        ],
+        status: [{ required: true, message: '请选择社团状态', trigger: 'blur' }]
       }
     }
   },
   methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.add()
+        } else {
+          this.$notify.error({
+            title: '填写不完整',
+            message: '请将表单填写完整'
+          })
+        }
+      })
+    },
     async add() {
       let clubName = this.addClubForm.clubName
       let imgUrl = this.addClubForm.imgUrl
