@@ -212,11 +212,13 @@ export default {
           message: '操作成功啦',
           type: 'success'
         })
+        this.applyContentDialogVisible = false
       } else {
         this.$notify.error({
           title: '操作失败',
           message: '系统错误信息：' + data.errMsg
         })
+        this.applyContentDialogVisible = false
       }
     }
   }
