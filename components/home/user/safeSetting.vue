@@ -3,12 +3,10 @@
         el-col(:span='10')
             .grid-content
                 el-form(:model="ruleForm" :rules="rules" :hide-required-asterisk="true" ref="ruleForm" label-width="70px")
-                    el-form-item(label="邮箱" prop="phone")
-                        el-input(v-model="ruleForm.phone")
-                    el-form-item(label="手机号" prop="classic")
-                        el-input(v-model="ruleForm.phone")
-                    el-form-item(label="密码" prop="phone")
-                        el-input(v-model="ruleForm.phone")
+                    el-form-item(label="邮箱" prop="email")
+                        el-input(v-model="ruleForm.email")
+                    el-form-item(label="密码" prop="password")
+                        el-input(v-model="ruleForm.password" type="password")
                     el-form-item
                         el-button(type="primary" style="width:100%" @click="submitForm('ruleForm')") 修改
 </template>
@@ -31,55 +29,56 @@ export default {
             trigger: 'change'
           },
           { max: 255, message: '长度不得多于255个字符', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          {
+            min: 6,
+            message: '太短啦！再长点'
+          },
+          { max: 30, message: '密码太长了！' }
         ]
       }
     }
   },
+  mounted() {
+    this.getUserInfo()
+  },
   methods: {
-    // async function fetchSomething () {
-    //   let ip = await this.$axios.$get('http://icanhazip.com');
-    //   console.log(ip);
-    // };
-    async login() {
-      let username = this.ruleForm.email
-      let password = this.ruleForm.password
-      let { data } = await axios.post(`/api/user/login`, {
-        email: username,
-        password: password
+    async getUserInfo() {
+      let { data } = await axios.get('/api/user/getuserinfo')
+      if (data.loginStatus == 'true') {
+        this.ruleForm.email = data.userInfo.email
+      }
+    },
+    async updateInfo() {
+      let { data } = await axios.post(`/api/user/updateUserAccountSafeInfo`, {
+        email: this.ruleForm.username,
+        password: this.ruleForm.nickname
       })
-      console.log(data.loginStatus === '0')
-      if (data.loginStatus === '0') {
-        console.log('wsl')
+      if (data.updateInfoResultCode === '0') {
         this.$notify.error({
-          title: '登录失败',
+          title: '更新失败',
           message: data.errMsg
         })
       }
-      if (data.loginStatus === '1') {
+      if (data.updateInfoResultCode === '1') {
         this.$notify({
-          title: '登录成功~',
-          message:
-            '身份验证通过，用户ID为' + data.userId + '，现在启动页面转向。',
-          type: 'success',
-          onClose: this.redirectpage
+          title: '信息修改成功',
+          message: '恭喜，您的信息已经修改成功啦。',
+          type: 'success'
         })
       }
-      console.log(data)
-    },
-    redirectpage() {
-      window.location.href = '/home/portal'
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.login()
-          this.$notify.info({
-            title: '登录中...',
-            message: '连接服务器中'
-          })
+          this.updateInfo()
         } else {
-          console.log('error submit!!')
-          return false
+          this.$notify.error({
+            title: '表单不完整',
+            message: '请填写所有表单内容'
+          })
         }
       })
     },
