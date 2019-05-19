@@ -108,11 +108,13 @@ export default {
   },
   methods: {
     async fillData() {
-      console.log('Start GET Data')
       let { data } = await axios.get('/api/club/getmyclublist')
-      console.log(data)
+      //console.log(data)
       if (data.getMyClubListResultCode == '0') {
-        console.log('LOGIN!')
+        this.$notify.error({
+          title: '操作失败',
+          message: '系统错误信息：' + data.errMsg
+        })
       }
       if (data.queryResult == '1') {
         this.clubList = data.data
@@ -130,7 +132,7 @@ export default {
     },
     async getActivityData(val) {
       let { data } = await axios.get(
-        '/api/activity/activityOfClub?clubId=' + val.id
+        '/api/activity/activityOfClub?clubId=' + val.clubInfo.id
       )
       this.clubActivityList = data
     }
